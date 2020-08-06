@@ -1,5 +1,7 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class movement : MonoBehaviour
 {
@@ -7,9 +9,14 @@ public class movement : MonoBehaviour
     public Rigidbody rb;
     private Transform playerTranform;
     public float speed = 10;
-    
+    public GameObject enemy;
+    public Image image;
+    public Text text;
+    public Image image1;
+    public Text text1;
 
-    
+
+
 
 
     // Start is called before the first frame update
@@ -18,8 +25,17 @@ public class movement : MonoBehaviour
         
         rb = GetComponent<Rigidbody>();
         this.rb.useGravity = false;
-        
+        enemy = GameObject.FindGameObjectWithTag("enemy");
+        for (int i = 0; i < 150; i++)
+        {
+            SpawnDrop();
+        }
 
+        image.enabled = false;
+        text.enabled = false;
+        image1.enabled = false;
+        text1.enabled = false;
+       
     }
     
 
@@ -101,11 +117,48 @@ public class movement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0,90 , 0);
             
         }
+        if (Input.GetKey("r"))
+        {
+            image.enabled = false;
+            text.enabled = false;
+            image1.enabled = false;
+            
+        }
        
     }
 
 
-    
 
+    void SpawnDrop()
+    {
+
+
+        Instantiate(enemy, new Vector3(Random.Range(-45.0f, 45.0f), Random.Range(-45.0f, 45.0f), Random.Range(-45.0f, 45.0f)), Quaternion.identity);
+
+    }
+    void OnCollisionEnter(Collision collisionInfo)
+    {
+        if (collisionInfo.collider.tag == "enemy")
+        {
+            transform.position = new Vector3(-45, 48, -45);
+            image.enabled = true;
+            text.enabled = true;
+
+        }
+        if (collisionInfo.collider.tag == "goal")
+        {
+            image1.enabled = true;
+            text1.enabled = true;
+            
+                Invoke ("Scene",1.5f);
+            
+        }
+       
+    }
+   
+    public void Scene()
+    {
+        SceneManager.LoadScene("final");
+    }
 
 }

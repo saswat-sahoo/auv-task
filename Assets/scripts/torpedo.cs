@@ -15,7 +15,7 @@ public class torpedo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // Load();
+        Launch();
 
     }
 
